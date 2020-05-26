@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Music Selector</title>
+  <script src="jspsych-6.1.0/jspsych.js"></script>
+  <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="jspsych-6.1.0/plugins/jspsych-survey-likert.js"></script>
+  <script src="jspsych-6.1.0/plugins/jspsych-html-slider-response.js"></script>
+  <script src="jspsych-6.1.0/plugins/jspsych-audio-keyboard-response.js"></script>
+  <script src="jspsych-6.1.0/plugins/jspsych-survey-multi-choice.js"></script>
+  <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css">
+  </link>
+</head>
+
+<body></body>
+<script>
+  /* create timeline */
+  var timeline = [];
+
+  /* assign subject ID */
+  var subject_id = jsPsych.randomization.randomID(15);
+  jsPsych.data.addProperties(
+    {
+      subject: subject_id
+    }
+);
+
+
+  /* define audio */
+  var all_songs = [
+    "mp3/1_Be_Happy.mp3",
+    "mp3/1_Skinny_Love.mp3",
+    "mp3/1_The_Sweetest.mp3",
+    "mp3/2_Blood_On_The_Ground.mp3",
+    "mp3/2_Boser_Wolf.mp3",
+    "mp3/2_Incomplete.mp3",
+    "mp3/2_Inside.mp3",
+    "mp3/2_Love's_Requiem.mp3",
+    "mp3/2_On_A_Slow_Boat_To_China.mp3",
+    "mp3/2_Sweet_Song.mp3",
+    "mp3/3_It_Only_Hurts_When_I'm_Breathing.mp3",
+    "mp3/3_Old_Blacktop_[Album_Version].mp3",
+    "mp3/3_Walk_on_the_wild_side.mp3",
+    "mp3/4_Come_On_Baby.mp3",
+    "mp3/4_Destiny.mp3",
+    "mp3/4_Make_Light.mp3",
+    "mp3/4_Mbube.mp3",
+    "mp3/5_Get_Lucky.mp3",
+    "mp3/5_Love's_Requiem.mp3",
+    "mp3/5_Valerie.mp3",
+    "mp3/7_Digital.mp3",
+    "mp3/7_Here_Today.mp3",
+    "mp3/8_Fire_And_Rain__(LP_Version).mp3",
+    "mp3/8_Restless.mp3",
+    "mp3/9_If_The_Creeks_Don't_Rise.mp3",
+    "mp3/9_Pain_(Live_Version).mp3",
+    "mp3/11_Be_Happy.mp3",
+    "mp3/12_Fire_And_Rain_(LP_Version).mp3",
+    "mp3/12_Skank_Down.mp3",
+    "mp3/12_Skinny_Love.mp3",
+    "mp3/12_Skinny_Love.mp3",
+    "mp3/13_Boser_Wolf.mp3",
+    "mp3/13_If_The_Creeks_Don't_Rise.mp3",
+    "mp3/13_Motown_Junk.mp3",
+    "mp3/14_Get_Lucky.mp3",
+    "mp3/28_Valerie.mp3",
+    "mp3/15_Bunkertor_7_(German_Texture).mp3",
+    "mp3/15_Here_Today.mp3",
+    "mp3/16_Restless.mp3",
+    "mp3/19_I_hate_Everything_About_You.mp3",
+    "mp3/21_Skank_Down.mp3",
+    "mp3/23_Inside.mp3",
+    "mp3/24_Restless.mp3",
+    "mp3/25_Old_Blacktop_[Album_Version].mp3",
+    "mp3/26_Make_Light.mp3",
+    "mp3/26_It_Only_Hurts_When_I'm_Breathing.mp3"
+  ]
+
+  var test_stimuli = [{
+      stimulus: "mp3/1_Be_Happy.mp3",
+      data: {
+        test_part: "song",
+        target: "happy"
+      }
+    },
+    {
+      stimulus: "mp3/1_Skinny_Love.mp3",
+      data: {
+        test_part: "song",
+        target: "sad"
+      }
+    },
+    {
+      stimulus: "mp3/1_The_Sweetest.mp3",
+      data: {
+        test_part: "song",
+        target: "relaxed"
+      }
+    },
+    {
+      stimulus: "mp3/2_Blood_On_The_Ground.mp3",
+      data: {
+        test_part: "song",
+        target: "angry"
+      }
+    },
+    {
+      stimulus: "mp3/2_Boser_Wolf.mp3",
+      data: {
+        test_part: "song",
+        target: "sad"
+      }
+    },
+    {
+      stimulus: "mp3/2_Incomplete.mp3",
+      data: {
+        test_part: "song",
+        target: "angry"
+      }
+    },
+    {
+      stimulus: "mp3/2_Inside.mp3",
+      data: {
+        test_part: "song",
+        target: "sad"
+      }
+    },
+    {
+      stimulus: "mp3/2_Love's_Requiem.mp3",
+      data: {
+        test_part: "song",
+        target: "sad"
+      }
+    },
+    {
+      stimulus: "mp3/2_On_A_Slow_Boat_To_China.mp3",
+      data: {
+        test_part: "song",
+        target: "relaxed"
+      }
+    },
+    {
+      stimulus: "mp3/2_Sweet_Song.mp3",
+      data: {
+        test_part: "song",
+        target: "relaxed"
+      }
+    },
+    {
+      stimulus: "mp3/3_It_Only_Hurts_When_I'm_Breathing.mp3",
+      data: {
+        test_part: "song",
+        target: "sad"
+      }
+    },
+    {
+      stimulus: "mp3/3_Old_Blacktop_[Album_Version].mp3",
+      data: {
+        test_part: "song",
+        target: "sad"
+      }
+    },
+    {
+      stimulus: "mp3/3_Walk_on_the_wild_side.mp3",
+      data: {
+        test_part: "song",
+        target: "relaxed"
+      }
+    },
+    {
+      stimulus: "mp3/4_Come_On_Baby.mp3",
+      data: {
+        test_part: "song",
+        target: "relaxed"
+      }
+    },
+    {
+      stimulus: "mp3/4_Destiny.mp3",
+      data: {
+        test_part: "song",
+        target: "relaxed"
+      }
+    },
+    {
+      stimulus: "mp3/4_Make_Light.mp3",
+      data: {
+        test_part: "song",
+        target: "happy"
+      }
+    },
+    {
+      stimulus: "mp3/4_Mbube.mp3",
+      data: {
+        test_part: "song",
+        target: "happy"
+      }
+    },
+    {
+      stimulus: "mp3/5_Get_Lucky.mp3",
+      data: {
+        test_part: "song",
+        target: "happy"
+      }
+    },
+    {
+      stimulus: "mp3/5_Love's_Requiem.mp3",
+      data: {
+      test_part: "song",
+      target: "sad"
+    }
+    },
+    {
+      stimulus: "mp3/5_Valerie.mp3",
+      data: {
+        test_part: "song",
+        target: "happy"
+      }
+    },
+    {
+      stimulus: "mp3/7_Digital.mp3",
+      data: {
+        test_part: "song",
+        target: "relaxed"
+      }
+    },
+    {
+      stimulus: "mp3/7_Here_Today.mp3",
+      data: {
+        test_part: "song",
+        target: "relaxed"
+      }
+    },
+    {
+      stimulus: "mp3/8_Fire_And_Rain__(LP_Version).mp3",
+      data: {
+        test_part: "song",
+        target: "sad"
+      }
+    },
+    {
+      stimulus: "mp3/8_Restless.mp3",
+      data: {
+        test_part: "song",
+        target: "happy"
+      }
+    },
+    {
+      stimulus: "mp3/9_If_The_Creeks_Don't_Rise.mp3",
+      data: {
+        test_part: "song",
+        target: "happy"
+      }
+    },
+    {
+      stimulus: "mp3/9_Pain_(Live_Version).mp3",
+      data: {
+        test_part: "song",
+        target: "angry"
+      }
+    },
+    {
+      stimulus: "mp3/11_Be_Happy.mp3",
+      data: {
+        test_part: "song",
+        target: "happy"
+      }
+    },
+    {
+      stimulus: "mp3/12_Fire_And_Rain_(LP_Version).mp3",
+      data: {
+        test_part: "song",
+        target: "sad"
+      }
+    },
+    {
+      stimulus: "mp3/12_Skank_Down.mp3",
+      data: {
+        test_part: "song",
+        target: "happy"
+      }
+    },
+    {
+      stimulus: "mp3/12_Skinny_Love.mp3",
+      data: {
+        test_part: "song",
+        target: "sad"
+      }
+    },
+    {
+      stimulus: "mp3/13_Boser_Wolf.mp3",
+      data: {
+        test_part: "song",
+        target: "sad"
+      }
+    },
+    {
+      stimulus: "mp3/13_If_The_Creeks_Don't_Rise.mp3",
+      data: {
+        test_part: "song",
+        target: "happy"
+      }
+    },
+    {
+      stimulus: "mp3/13_Motown_Junk.mp3",
+      data: {
+        test_part: "song",
+        target: "angry"
+      }
+    },
+    {
+      stimulus: "mp3/14_Get_Lucky.mp3",
+      data: {
+        test_part: "song",
+        target: "happy"
+      }
+    },
+    {
+      stimulus: "mp3/28_Valerie.mp3",
+      data: {
+        test_part: "song",
+        target: "happy"
+      }
+    },
+    {
+      stimulus: "mp3/15_Bunkertor_7_(German_Texture).mp3",
+      data: {
+        test_part: "song",
+        target: "angry"
+    }
+    },
+    {
+      stimulus: "mp3/15_Here_Today.mp3",
+      data: {
+        test_part: "song",
+        target: "sad"
+      }
+    },
+    {
+      stimulus: "mp3/16_Restless.mp3",
+      data: {
+        test_part: "song",
+        target: "happy"
+      }
+    },
+    {
+      stimulus: "mp3/19_I_hate_Everything_About_You.mp3",
+      data: {
+        test_part: "song",
+        target: "angry"
+      }
+    },
+    {
+      stimulus: "mp3/21_Skank_Down.mp3",
+      data: {
+        test_part: "song",
+        target: "happy"
+      }
+    },
+    {
+      stimulus: "mp3/23_Inside.mp3",
+      data: {
+        test_part: "song",
+        target: "sad"
+      }
+    },
+    {
+      stimulus: "mp3/24_Restless.mp3",
+      data: {
+        test_part: "song",
+        target: "happy"
+      }
+    },
+    {
+      stimulus: "mp3/25_Old_Blacktop_[Album_Version].mp3",
+      data: {
+        test_part: "song",
+        target: "sad"
+      }
+    },
+    {
+      stimulus: "mp3/26_Make_Light.mp3",
+      data: {
+        test_part: "song",
+        target: "happy"
+      }
+    },
+    {
+      stimulus: "mp3/26_It_Only_Hurts_When_I'm_Breathing.mp3",
+      data: {
+        test_part: "song",
+        target: "sad"
+      }
+    }
+  ];
+
+  /* define welcome message trial */
+  var welcome = {
+    type: "html-keyboard-response",
+    stimulus: "Welcome to the experiment. Press any key to begin.",
+    data: {test_part: "welcome"}
+  };
+  timeline.push(welcome);
+
+  /* Experiment instructions */
+
+  var trial_instructions = {
+    type: "html-keyboard-response",
+    stimulus: "<p>In this study you will hear a short musical clip and then make some ratings about the emotion it expresses or conveys</p>" +
+      "<p>First you will select which emotion you think the musical clip is expressing</p>" +
+      "<p>You will then rate how pleasant the feeling expressed in the musical clip was and also how energetic it was</p>" +
+      "<p>Press the space bar to begin</p>",
+    choices: ['spacebar'],
+    data: {test_part: "instruction"}
+  };
+  timeline.push(trial_instructions);
+
+  /* Experimental trials */
+
+  var fixation_black = {
+    type: 'html-keyboard-response',
+    stimulus: '<div style="font-size:60px;">+</div>',
+    choices: jsPsych.NO_KEYS,
+    trial_duration: 1000,
+    data: {test_part: "fixation"}
+  }
+
+  var fixation_green = {
+    type: 'html-keyboard-response',
+    stimulus: '<div style="font-size:60px;color:green">+</div>',
+    choices: jsPsych.NO_KEYS,
+    trial_duration: 500,
+    data: {test_part: "fixation"}
+  }
+
+  var songs = {
+    type: "audio-keyboard-response",
+    stimulus: jsPsych.timelineVariable('stimulus'),
+    trial_duration: 1000,
+    data: jsPsych.timelineVariable('data')
+  }
+
+  var emotion = {
+    type: 'survey-multi-choice',
+    questions: [{
+      prompt: "What emotion did this musical clip express?",
+      options: [
+        "Happy",
+        "Sad",
+        "Angry",
+        "Relaxed",
+        "None of these"
+      ]
+    }],
+    data: {test_part: "emotion_rating"}
+  }
+
+  var valence = {
+    type: 'html-slider-response',
+    stimulus: '<p>How negative/positive was this feeling expressed in this musical clip</p>',
+    labels: ['Very Negative', 'Very Positive'],
+    data: {test_part: "valence rating"}
+  }
+
+  var arousal = {
+    type: 'html-slider-response',
+    stimulus: "<p>How energetic/arousing was the feeling expressed in this musical clip</p>",
+    labels: ['Very Low', 'Very High'],
+    data: {test_part: "arousal rating"}
+  }
+
+  var test_procedure = {
+    timeline: [fixation_black, fixation_green, songs, emotion, valence, arousal],
+    timeline_variables: test_stimuli,
+    randomize_order: true
+  }
+  timeline.push(test_procedure);
+
+
+  var thanks = {
+    type: 'html-keyboard-response',
+    stimulus: "Thankyou",
+    data: {test_part: "thanks"}
+  };
+  timeline.push(thanks);
+
+
+
+  /* start the experiment */
+  jsPsych.init({
+    preload_audio: all_songs,
+    on_finish: function() {
+      jsPsych.data.displayData();
+      jsPsych.data.get().localSave('csv', 'Audiodata.csv');
+    },
+    timeline: timeline,
+    use_webaudio: false,
+  });
+</script>
+
+</html>
