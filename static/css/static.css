@@ -1,0 +1,16 @@
+/*
+ * CSS for static sites
+ *
+ * This stylesheet provides minimal styling to make the consent page look good
+ * It is designed to be consistent with the js psych template
+ */
+
+ @import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
+
+/* font-family: 'Open Sans', sans-serif; */
+
+div {
+  text-align: center;
+  color: black;
+  font-family: 'Open Sans', sans-serif;
+}
