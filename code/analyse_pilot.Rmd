@@ -1,0 +1,167 @@
+---
+title: "Analysis of Pilot Data"
+output:
+  html_document:
+    df_print: paged
+    code_folding: hide
+    toc: true
+---
+
+```{r include = FALSE}
+library(tidyverse)
+library(lmerTest)
+```
+
+```{r, message = FALSE}
+pilot <- here::here(
+  "data",
+  "processed_pilot.csv"
+) %>% 
+  read_csv() %>% 
+  mutate(
+    song = gsub(
+      "audio/",
+      "",
+      stimulus_song
+    )
+  ) %>% 
+  rename(
+    target = target_song
+  )
+```
+
+In this study we sampled `r nrow(distinct(pilot, pid))` participants, with each participant listening to `r max(pilot$trial_index+1)` 1 second exceprts. Participants rated each song in terms of the emotion they thought it expressed, it's valence, and it's arousal. 
+
+# All song consdidered
+
+From the table below we can see that over all songs 57% of happy targets were correctly identified and 48% of sad targfets were correctly identified
+```{r}
+correct_overall <- pilot %>% 
+  group_by(target) %>% 
+  summarise(correct = sum(correct)/n(),
+            valence = mean(valence),
+            arousal = mean(arousal))
+
+correct_overall %>% 
+  arrange(target) %>% 
+  knitr::kable(format = "html") %>% 
+  kableExtra::kable_styling() %>% 
+  kableExtra::scroll_box()
+```
+
+# Considering Happy and Sad taget songs
+
+```{r}
+target_happy <- pilot %>% 
+  select(target, song, correct, valence, arousal) %>% 
+  filter(target == "happy") %>% 
+  group_by(
+    song
+  ) %>% summarise(
+    correct = sum(correct)/n(),
+    valence = mean(valence),
+    arousal = mean(arousal)
+  ) %>% 
+  arrange(correct)
+
+
+target_happy  
+```
+
+Based of this I will retain the following songs as happy songs: 
+  * 12_Skank_Down.mp3
+  * 26_Make_Light.mp3
+  * 28_Valerie.mp3
+  * 11_Be_Happy.mp3
+  * 16_Restless.mp3	
+
+  
+I will find the mean correct for these songs to approximate a match with teh sad songs in terms of difficulty 
+
+```{r}
+selected_happy <- target_happy %>% 
+  filter(
+    song %in% c("12_Skank_Down.mp3", "26_Make_Light.mp3", "28_Valerie.mp3", "11_Be_Happy.mp3", "16_Restless.mp3") 
+  )
+
+range(selected_happy$correct)
+mean(selected_happy$correct)
+
+```
+
+  
+```{r}
+target_sad <- pilot %>% 
+  select(target, song, correct, valence, arousal) %>% 
+  filter(target == "sad") %>% 
+  group_by(
+    song
+  ) %>% summarise(
+    correct = sum(correct)/n(),
+    valence = mean(valence),
+    arousal = mean(arousal)
+  ) %>% 
+  arrange(correct) %>% 
+  filter(correct > .25)
+
+
+target_sad  
+```
+
+Based of this I will retain the following songs as sad songs: 
+  * 25_Old_Blacktop.mp3
+  * 12_Fire_And_Rain_(LP_Version).mp3	
+  * 15_Here_Today.mp3	
+  * 2_Love's_Requiem.mp3,
+  * 2_Inside.mp3
+
+```{r}
+selected_sad <- target_sad %>% 
+  filter(
+    song %in% c("25_Old_Blacktop.mp3", "12_Fire_And_Rain_(LP_Version).mp3", "15_Here_Today.mp3", "2_Love's_Requiem.mp3", "2_Inside.mp3") 
+  )
+
+range(selected_sad$correct)
+mean(selected_sad$correct)
+```
+
+Here the ranges and means are as approximate as possible without duplicating songs. 
+
+Below I have plotted the valence and arousal 
+
+
+```{r}
+pilot %>% 
+  select(target, song, correct, valence, arousal) %>% 
+  group_by(song) %>%
+  summarise(
+    valence = mean(valence),
+    arousal = mean(arousal),
+    target = target,
+    correct = sum(correct)/n()
+  ) %>% 
+  filter(
+    song %in% c("25_Old_Blacktop.mp3", "12_Fire_And_Rain_(LP_Version).mp3", "15_Here_Today.mp3", "2_Love's_Requiem.mp3", "2_Inside.mp3", "12_Skank_Down.mp3", "26_Make_Light.mp3", "28_Valerie.mp3", "11_Be_Happy.mp3", "16_Restless.mp3")
+  ) %>% 
+  distinct() %>% 
+  ggplot2::ggplot(
+    aes(
+      x = valence,
+      y = arousal,
+      color = target,
+      label = round(correct, 2)
+    ) 
+  )+
+  geom_point() +
+  theme_classic() +
+  ggrepel::geom_text_repel() +
+  coord_cartesian(xlim = c(1, 7), ylim = c(1, 7)) +
+  ggplot2::ggtitle("", subtitle = "Labels indicate proption of times song was correctly labelled as the target")
+  
+  
+  
+  
+
+```
+
+
