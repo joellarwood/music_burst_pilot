@@ -49,7 +49,7 @@ correct_overall %>%
   kableExtra::scroll_box()
 ```
 
-# Considering Happy and Sad taget songs
+# Considering Happy, Sad, and Angry taget songs
 
 ```{r}
 target_happy <- pilot %>% 
@@ -69,19 +69,20 @@ target_happy
 ```
 
 Based of this I will retain the following songs as happy songs: 
-  * 12_Skank_Down.mp3
-  * 26_Make_Light.mp3
-  * 28_Valerie.mp3
-  * 11_Be_Happy.mp3
-  * 16_Restless.mp3	
 
+- 21_Skank_Down.mp3
+- 16_Restless.mp3
+- 5_Get_Lucky.mp3
+- 5_Valrie.mp3
+- 1_Be_Happy.mp3.
+- 26_Make_Light.mp3
   
 I will find the mean correct for these songs to approximate a match with teh sad songs in terms of difficulty 
 
 ```{r}
 selected_happy <- target_happy %>% 
   filter(
-    song %in% c("12_Skank_Down.mp3", "26_Make_Light.mp3", "28_Valerie.mp3", "11_Be_Happy.mp3", "16_Restless.mp3") 
+    song %in% c("21_Skank_Down.mp3", "26_Make_Light.mp3", "5_Valerie.mp3", "11_Be_Happy.mp3", "16_Restless.mp3", "5_Get_Lucky.mp3") 
   )
 
 range(selected_happy$correct)
@@ -109,27 +110,91 @@ target_sad
 ```
 
 Based of this I will retain the following songs as sad songs: 
-  * 25_Old_Blacktop.mp3
-  * 12_Fire_And_Rain_(LP_Version).mp3	
-  * 15_Here_Today.mp3	
-  * 2_Love's_Requiem.mp3,
-  * 2_Inside.mp3
+
+- 8_Fire_And_Rain_(LP_Version).mp3
+- 3_Old_Blacktop.mp3	
+- 7_Here_Today.mp3	
+- 2_Love's_Requiem.mp3,
+- 2_Inside.mp3
+- 12_Skinny_Love.mp3
 
 ```{r}
 selected_sad <- target_sad %>% 
   filter(
-    song %in% c("25_Old_Blacktop.mp3", "12_Fire_And_Rain_(LP_Version).mp3", "15_Here_Today.mp3", "2_Love's_Requiem.mp3", "2_Inside.mp3") 
+    song %in% c("8_Fire_And_Rain_(LP_Version).mp3", "3_Old_Blacktop.mp3", "15_Here_Today.mp3", "7_Here_Today.mp3", "2_Inside.mp3", "12_Skinny_Love.mp3") 
   )
 
 range(selected_sad$correct)
 mean(selected_sad$correct)
 ```
 
+
 Here the ranges and means are as approximate as possible without duplicating songs. 
 
-Below I have plotted the valence and arousal 
+I also want to have angry target songs 
+
+```{r}
+target_angry <- pilot %>% 
+  select(target, song, correct, valence, arousal) %>% 
+  filter(target == "angry") %>% 
+  group_by(
+    song
+  ) %>% summarise(
+    correct = sum(correct)/n(),
+    valence = mean(valence),
+    arousal = mean(arousal)
+  ) %>% 
+  arrange(correct)
 
 
+target_angry  
+```
+
+Here I will use 
+- 13_Motown_Junk.mp3
+- 2_Incomplete.mp3
+
+```{r}
+selected_angry <- target_angry %>% 
+  filter(
+    song %in% c("13_Motown_Junk.mp3", "2_Incomplete.mp3") 
+  )
+
+range(selected_angry$correct)
+mean(selected_angry$correct)
+```
+
+
+Here a list of selected songs can be seen
+
+```{r}
+selected_songs <- pilot %>% 
+  select(target, song, correct, valence, arousal) %>% 
+  group_by(song) %>%
+  summarise(
+    valence = mean(valence),
+    arousal = mean(arousal),
+    target = target,
+    correct = sum(correct)/n()
+  ) %>% 
+  filter(
+    song %in% c("25_Old_Blacktop.mp3", "12_Fire_And_Rain_(LP_Version).mp3", "15_Here_Today.mp3", "2_Love's_Requiem.mp3", "2_Inside.mp3", "12_Skank_Down.mp3", "26_Make_Light.mp3", "28_Valerie.mp3", "11_Be_Happy.mp3", "16_Restless.mp3", "13_Motown_Junk.mp3", "2_Incomplete.mp3")
+  ) %>% 
+  distinct() %>% 
+  arrange(target) %>% 
+  knitr::kable() %>% 
+  kableExtra::kable_styling()
+
+kableExtra::save_kable(
+  selected_songs,
+  here::here(
+  "selected_songs_tab.html"
+)
+)
+
+```
+
+And here the songs can be seen plotted in terms of valence and arousal
 ```{r}
 pilot %>% 
   select(target, song, correct, valence, arousal) %>% 
@@ -141,27 +206,31 @@ pilot %>%
     correct = sum(correct)/n()
   ) %>% 
   filter(
-    song %in% c("25_Old_Blacktop.mp3", "12_Fire_And_Rain_(LP_Version).mp3", "15_Here_Today.mp3", "2_Love's_Requiem.mp3", "2_Inside.mp3", "12_Skank_Down.mp3", "26_Make_Light.mp3", "28_Valerie.mp3", "11_Be_Happy.mp3", "16_Restless.mp3")
+    song %in% c("25_Old_Blacktop.mp3", "12_Fire_And_Rain_(LP_Version).mp3", "15_Here_Today.mp3", "2_Love's_Requiem.mp3", "2_Inside.mp3", "12_Skank_Down.mp3", "26_Make_Light.mp3", "28_Valerie.mp3", "11_Be_Happy.mp3", "16_Restless.mp3", "13_Motown_Junk.mp3", "2_Incomplete.mp3")
   ) %>% 
   distinct() %>% 
   ggplot2::ggplot(
     aes(
       x = valence,
       y = arousal,
-      color = target,
-      label = round(correct, 2)
+      shape = target,
+      label = song,
+      color = correct
     ) 
   )+
   geom_point() +
   theme_classic() +
   ggrepel::geom_text_repel() +
   coord_cartesian(xlim = c(1, 7), ylim = c(1, 7)) +
-  ggplot2::ggtitle("", subtitle = "Labels indicate proption of times song was correctly labelled as the target")
+  ggplot2::ggtitle("Selected Songs plotted on Valence and Arousal") +
+  scale_x_continuous(breaks = c(1:7)) +
+  scale_y_continuous(breaks = c(1:7))
   
-  
-  
-  
+
+ggsave(
+  here::here(
+    "selected_songs_plt.png"
+  )
+)
 
 ```
-
-
