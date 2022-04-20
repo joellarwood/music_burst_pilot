@@ -1,0 +1,8 @@
+nms~V2~V3~V4~V5
+Target Emotion~angry~happy~relaxed~sad
+Proportion Correct~0.79~0.58~0.49~0.48
+Mean Accuracy within category (range)~0.79 (0.53,1)~0.58 (0.43,0.73)~0.49 (0.13,0.77)~0.48 (0.1,0.77)
+One proportion Z test~X(1) = 227.56, p < .001, 95% CI[0.72,1]~X(1) = 224.05, p < .001, 95% CI[0.54,1]~X(1) = 70.94, p < .001, 95% CI[0.43,1]~X(1) = 138.14, p < .001, 95% CI[0.44,1]
+Proportion of excerpts supported~5/5~13/13~6/8~11/16
+Valence Mean (SD)~-1 (1)~1 (1)~0 (1)~0 (1)
+Arousal Mean (SD)~1 (2)~1 (1)~0 (1)~0 (1)

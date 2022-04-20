@@ -1,0 +1,5 @@
+Target Emotion,Unweighted Probability,Weighted Probabiliy,Proportion Correct,Mean Accuracy within category (range),One proportion Z test (unweighted),One proportion Z test (weighted),Proportion of excerpts supported (unweighted),Proportion of excerpts supported (weighted)
+angry,0.25,0.11904761904761904,0.7866666666666666,"0.79(0.53,1)","X(1) = 227.56, p < .001, 95% CI[0.72,1]","X(1) = 631.14, p < .001, 95% CI[0.72,1]",5/5,5/5
+happy,0.25,0.30952380952380953,0.5794871794871795,"0.58(0.43,0.73)","X(1) = 224.05, p < .001, 95% CI[0.54,1]","X(1) = 131.73, p < .001, 95% CI[0.54,1]",13/13,11/13
+relaxed,0.25,0.19047619047619047,0.4875,"0.49(0.13,0.77)","X(1) = 70.94, p < .001, 95% CI[0.43,1]","X(1) = 135.4, p < .001, 95% CI[0.43,1]",6/8,7/8
+sad,0.25,0.38095238095238093,0.48333333333333334,"0.48(0.1,0.77)","X(1) = 138.14, p < .001, 95% CI[0.44,1]","X(1) = 20.9, p < .001, 95% CI[0.44,1]",11/16,6/16

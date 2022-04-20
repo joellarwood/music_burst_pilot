@@ -13,15 +13,13 @@ library(janitor)
 
 # Load data ---------------------------------------------------------------
 
-pilot_read <- jsonlite::stream_in(
-  file(
-    here::here(
-      "data",
-      "jatos_export_18_september.txt"
+load_pilot_data <- function(file){
+  pilot_read <- jsonlite::stream_in(
+    file(
+      file
     )
   )
-)
-
+  
 
 # Clean data for analysis -------------------------------------------------
 
@@ -138,8 +136,8 @@ processed <- pilot_long %>%
   dplyr::mutate(
     correct = if_else(
       emotion == target_song, 
-      TRUE, 
-      FALSE
+      1, 
+      0
     )
   ) %>% 
   mutate(
@@ -147,34 +145,38 @@ processed <- pilot_long %>%
       as.character(
         recode(
           valence, 
-          "49" = "1",
-          "50" = "2",
-          "51" = "3",
-          "52" = "4",
-          "53" = "5",
-          "54" = "6",
-          "55" = "7")
+          "49" = "-3",
+          "50" = "-2",
+          "51" = "-1",
+          "52" = "0",
+          "53" = "1",
+          "54" = "2",
+          "55" = "3")
       )
   ),
   arousal = as.numeric(
     as.character(
       recode(
         arousal, 
-        "49" = "1",
-        "50" = "2",
-        "51" = "3",
-        "52" = "4",
-        "53" = "5",
-        "54" = "6",
-        "55" = "7")
+        "49" = "-3",
+        "50" = "-2",
+        "51" = "-1",
+        "52" = "0",
+        "53" = "1",
+        "54" = "2",
+        "55" = "3")
     )
   )
+  ) %>% 
+  mutate(
+    across(
+      where(is.character),
+      as.factor
+    ),
+    pid = as.factor(pid)
   )
 
-write_csv(
-  processed,
-  here::here(
-    "data",
-    "processed_pilot.csv"
-  )
-)
+return(processed)
+}
+
+

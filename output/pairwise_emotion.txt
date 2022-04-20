@@ -1,0 +1,4 @@
+rowname~angry~happy~relaxed
+happy~< .001~NA~NA
+relaxed~< .001~0.03~NA
+sad~< .001~0.006~0.979
